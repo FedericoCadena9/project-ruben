@@ -5,8 +5,17 @@ import { Input } from "../components/Input";
 const Login = () => {
   return (
     <section className="grid grid-cols-1 gap-0 lg:grid-cols-12 h-screen">
-      <div className="w-full col-span-1 p-4 mx-auto lg:col-span-5 xl:p-12 sm:w-2/4 lg:w-3/4 place-self-center	">
-        <div>Logo</div>
+      <div className="w-full col-span-1 p-4 mx-auto lg:col-span-5 xl:p-12 sm:w-2/4 lg:w-3/4 place-self-center">
+        <div className="w-full flex justify-center">
+        <div className="relative sm:w-20 sm:h-20 w-16 h-16">
+            <Image 
+            src="https://raw.githubusercontent.com/FedericoCadena9/project-ruben/main/assets/img/Logo.png"
+            alt="ITESHU Logo"
+            layout="fill"
+            objectFit="cover"
+            />
+        </div>
+        </div>
         <div className="text-center">
           <h1 className="mt-6 mb-4 text-2xl font-bold text-gray-800">
             Iniciar Sesión
