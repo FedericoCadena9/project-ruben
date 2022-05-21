@@ -9,9 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "next": "12.1.6",
-    "react": "18.1.0",
-    "react-dom": "18.1.0"
+    "next": "^12.1.6",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.1",
@@ -20,5 +20,18 @@
     "eslint-config-next": "12.1.6",
     "postcss": "^8.4.13",
     "tailwindcss": "^3.0.24"
-  }
+  },
+  "description": "This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).",
+  "main": "next.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FedericoCadena9/project-ruben.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FedericoCadena9/project-ruben/issues"
+  },
+  "homepage": "https://github.com/FedericoCadena9/project-ruben#readme"
 }
