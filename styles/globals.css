@@ -14,4 +14,8 @@
     .btn-dashboard {
         @apply flex flex-row items-center h-12 px-3 rounded-lg cursor-pointer;
     }
+
+    .btn {
+        @apply text-center w-full py-3 text-sm px-6 rounded ;
+    }
 }

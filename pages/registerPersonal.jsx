@@ -54,13 +54,13 @@ const RegisterPersonal = () => {
                         {/* Apellidos */}
                         <div className="sm:flex sm:space-x-4">
                             <Input
-                                id="apellidPaterno"
+                                id="apellidoPaterno"
                                 type="text"
                                 label="Apellido Paterno"
                                 placeholder="Doe"
                             />
                             <Input
-                                id="apellidMaterno"
+                                id="apellidoMaterno"
                                 type="text"
                                 label="Apellido Materno"
                                 placeholder="Smith"

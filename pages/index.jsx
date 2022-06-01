@@ -1,10 +1,21 @@
 import { ProjectCard } from "../components/ProjectCard";
 
 import { useState } from "react";
+import Upload from "../components/Upload";
 
 const Home = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+
+  let [isOpen, setIsOpen] = useState(false);
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
+  function openModal() {
+    setIsOpen(true);
+  }
 
   return (
     <section className="min-h-screen bg-primary-100">
@@ -15,7 +26,7 @@ const Home = () => {
       >
         {/* Close Menu Responsive */}
         <div
-          className="mx-4 mt-5 sm:hidden"
+          className="mx-4 mt-5 md:hidden"
           onClick={() => setIsMenuOpen(false)}
         >
           <svg
@@ -46,7 +57,10 @@ const Home = () => {
         <div className="flex flex-col w-full justify-between px-4 pt-6 h-3/4">
           <div className="">
             <div className="my-px">
-              <div className="btn-dashboard text-blue-500 bg-blue-50 font-medium">
+              <div
+                className="btn-dashboard text-blue-500 bg-blue-50 font-medium"
+                onClick={openModal}
+              >
                 <span className="flex items-center justify-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -115,12 +129,12 @@ const Home = () => {
 
       <div className="ml-0 transition md:ml-64 flex flex-col flex-grow duration-150 ease-in">
         {/* Search Header Projects */}
-        <header className=" bg-white p-4 sm:m-8 sm:rounded-xl fixed sm:static z-40 min-w-full sm:min-w-min shadow sm:shadow-none">
-          <div className="flex flex-col sm:items-center sm:flex-row">
+        <header className=" bg-white p-4 sm:m-8 sm:rounded-xl fixed sm:static z-30 min-w-full sm:min-w-min shadow sm:shadow-none py-4">
+          <div className="flex flex-col  md:flex-row">
             <div className="flex justify-between">
               {/* Hamburger Menu Responsive */}
               <div
-                className="text-gray-700 sm:hidden"
+                className="text-gray-700 md:hidden sm:py-4"
                 onClick={() => setIsMenuOpen(true)}
               >
                 <svg
@@ -140,7 +154,10 @@ const Home = () => {
               </div>
 
               {/* Filters Button Responsive */}
-              <div className="text-gray-500 sm:hidden" onClick={() => setIsFiltersOpen(!isFiltersOpen)}>
+              <div
+                className="text-gray-500 sm:hidden"
+                onClick={() => setIsFiltersOpen(!isFiltersOpen)}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-6 w-6"
@@ -159,7 +176,9 @@ const Home = () => {
             </div>
 
             <div
-              className={`flex-col lg:flex-row lg:justify-between w-full lg:items-center pt-8 sm:pt-0 space-y-4 sm:space-y-0 ${isFiltersOpen ? 'flex' : 'hidden sm:flex'}`}
+              className={`flex-col lg:flex-row lg:justify-between w-full lg:items-center pt-8 sm:pt-0 space-y-4 sm:space-y-0 ${
+                isFiltersOpen ? "flex" : "hidden sm:flex"
+              }`}
             >
               {/* Search Input */}
               <div className="relative lg:w-auto sm:py-3 lg:py-0 lg:pr-2">
@@ -277,6 +296,9 @@ const Home = () => {
       {isMenuOpen && (
         <div className="fixed inset-0 z-10 w-screen h-screen bg-black bg-opacity-25 ease-out transition duration-200"></div>
       )}
+
+      {/* Modal Upload */}
+      <Upload isOpen={isOpen} closeModal={closeModal}/>
     </section>
   );
 };
