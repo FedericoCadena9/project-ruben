@@ -207,7 +207,7 @@ const Home = () => {
                       id="basic"
                       className="block w-full truncate rounded-md border-white pl-12 pr-8 text-sm transition text-gray-400 "
                     >
-                      <option selected="">Categoría</option>
+                      <option value="">Categoría</option>
                       <option>Biomedicina</option>
                     </select>
                   </div>
@@ -234,7 +234,7 @@ const Home = () => {
                       id="basic"
                       className="block w-full truncate rounded-md border-white pl-12 pr-8 text-sm transition text-gray-400 "
                     >
-                      <option selected="">Fecha</option>
+                      <option value="">Fecha</option>
                       <option>Hace 7 dias</option>
                     </select>
                   </div>
