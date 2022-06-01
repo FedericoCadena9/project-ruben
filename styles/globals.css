@@ -10,4 +10,8 @@
     .link {
         @apply text-sm text-primary-500 underline hover:text-primary-600 active:text-primary-600;
     }
+
+    .btn-dashboard {
+        @apply flex flex-row items-center h-12 px-3 rounded-lg cursor-pointer;
+    }
 }
