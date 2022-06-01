@@ -93,7 +93,7 @@ export default function Upload({ isOpen, closeModal }) {
 
                     <div className="w-full space-y-1">
                       <label
-                        for="basic"
+                        htmlFor="basic"
                         className="text-sm font-semibold text-gray-600"
                       >
                         Requisitos
