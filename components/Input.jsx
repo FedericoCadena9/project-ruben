@@ -1,9 +1,7 @@
-import React from "react";
-
 export const Input = ({id, type, label, placeholder}) => {
   return (
     <div className="w-full space-y-2">
-      <label htmlFor={id} className="text-sm font-semibold text-gray-800">
+      <label htmlFor={id} className="text-sm font-semibold text-gray-600">
         {label}
       </label>
       <input

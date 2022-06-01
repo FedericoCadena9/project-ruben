@@ -4,7 +4,7 @@
 
 @layer components {
     .btn-primary {
-        @apply text-white w-full py-3 px-6 rounded bg-primary-500 lg:hover:bg-primary-600 active:bg-primary-600 cursor-pointer shadow-lg shadow-primary-500/40;
+        @apply text-white text-center w-full py-3 text-sm px-6 rounded bg-primary-500 lg:hover:bg-primary-600 active:bg-primary-600 cursor-pointer shadow-lg shadow-primary-500/40;
     }
 
     .link {
