@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Router } from 'next/router'
-// import { parseCookies } from 'nookies';
+import { parseCookies } from 'nookies';
 
 import '../styles/globals.css'
 
@@ -11,9 +11,7 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <>
-    <QueryClientProvider client={queryClient}>
           <Component {...pageProps} />
-        </QueryClientProvider>
     </>
   )
 }
@@ -21,7 +19,10 @@ function MyApp({ Component, pageProps }) {
 
 function redirectUser(ctx, location) {
   if(ctx.req) {
-    ctx.res.writeHead(302, { Location: location});
+    ctx.res.writeHead(302, {
+      Location: location,
+      "Content-Type": "text/html; charset=utf-8",
+    });
     ctx.res.end();
   } else {
     Router.push(location);
@@ -30,12 +31,11 @@ function redirectUser(ctx, location) {
 
 MyApp.getInitialProps = async ({ctx}) => {
 
-  const jwt = false
+  const jwt = parseCookies(ctx).jwt
 
   if(!jwt) {
     if (ctx.pathname === "/") {
       redirectUser(ctx, "login");
-      
     }
   }
 
