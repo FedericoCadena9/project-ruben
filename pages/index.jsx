@@ -3,7 +3,12 @@ import { ProjectCard } from "../components/ProjectCard";
 import { useState } from "react";
 import Upload from "../components/Upload";
 
-const Home = () => {
+import getConfig from "next/config";
+import axios from "axios";
+
+import { parseCookies } from 'nookies';
+
+const Home = ({ projects }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
@@ -16,6 +21,8 @@ const Home = () => {
   function openModal() {
     setIsOpen(true);
   }
+
+  console.log(projects.data);
 
   return (
     <section className="min-h-screen bg-primary-100">
@@ -298,9 +305,46 @@ const Home = () => {
       )}
 
       {/* Modal Upload */}
-      <Upload isOpen={isOpen} closeModal={closeModal}/>
+      <Upload isOpen={isOpen} closeModal={closeModal} />
     </section>
   );
+};
+
+const { publicRuntimeConfig } = getConfig();
+
+export const getServerSideProps = async (ctx) => {
+  // const { data } = await axios.post(
+  //   "https://software-ing.herokuapp.com/api/auth/local/",
+  //   {
+  //     identifier: "test@gmail.com",
+  //     password: "test123",
+  //   }
+  // );
+
+  // let jwt = data.jwt;
+  const jwt = parseCookies(ctx).jwt
+
+  const baseUrl = `${"https://software-ing.herokuapp.com/api"}`;
+
+  const dataApi = async (url) => {
+    const { data } = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+
+    return data;
+  };
+
+  const projects = await dataApi(`${baseUrl}/proyectos`);
+
+  // console.log(projects);
+
+  return {
+    props: {
+      projects: projects
+    },
+  };
 };
 
 export default Home;

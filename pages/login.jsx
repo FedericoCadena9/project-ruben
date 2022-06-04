@@ -2,10 +2,52 @@ import Image from "next/image";
 import Link from 'next/link';
 import Head from "next/head";
 import { Input } from "../components/Input";
+import { useState } from "react";
+import { setCookie } from "nookies";
+import Router  from 'next/router'
+import toast, { Toaster } from 'react-hot-toast';
+
+
 
 const Login = () => {
+
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+
+ async function handleLogin() {
+
+  const loginInfo = {
+    identifier: username,
+    password: password
+  }
+
+  const login = await fetch("https://software-ing.herokuapp.com/api/auth/local/", {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(loginInfo)
+  })
+
+  const loginResponse = await login.json();
+
+  setCookie(null, 'jwt', loginResponse.jwt, {
+    maxAge: 30 * 24 * 60 * 60,
+    path: '/',
+  })
+
+  Router.push('/');
+
+ }
+
   return (
     <section className="grid grid-cols-1 gap-0 lg:grid-cols-12 h-screen">
+      <Head>
+        <title>| Iniciar Sesión</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+
       <div className="w-full col-span-1 lg:col-span-4 lg:px-3 xl:px-0 max-w-xs place-self-center px-4 sm:px-0 sm:max-w-md">
         <div className="w-full flex justify-center">
           {/* <div className="relative sm:w-20 sm:h-20 w-16 h-16">
@@ -33,12 +75,16 @@ const Login = () => {
               type="email"
               label="Correo Electrónico"
               placeholder="a12345678@correo.edu.mx"
+              onChange={e => setUsername(e.target.value)}
+              value={username}
             />
             <Input
               id="password"
               type="password"
               label="Contraseña"
               placeholder="Contraseña"
+              onChange={e => setPassword(e.target.value)}
+              value={password} 
             />
           </div>
 
@@ -49,9 +95,7 @@ const Login = () => {
           </div>
 
           <div className="flex items-center justify-center my-10">
-            <Link href="/">
-              <a className="btn-primary"> Iniciar Sesión</a>
-            </Link>
+            <button type="button" className="btn-primary" onClick={() => handleLogin()}>Iniciar Sesión</button>
           </div>
         </form>
         <div className="my-6 space-y-2">
@@ -64,13 +108,11 @@ const Login = () => {
         </div>
       </div>
       <div className="col-span-1 lg:col-span-8 lg:inline-block hidden">
-        <div className="object-cover w-full h-64 min-h-full bg-gray-100 relative">
-          <Image
-            src="/loginBackground.svg"
-            alt="ITESHU estudiantes con una laptop"
-            layout="fill"
-            objectFit="cover"
-          />
+        <div className="object-cover w-full h-64 min-h-full bg-gray-100 relative bg-cover"
+        style={{
+          backgroundImage: `url(/loginBackground.svg)`,
+        }}>
+          
         </div>
       </div>
     </section>
