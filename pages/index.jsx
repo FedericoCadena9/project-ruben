@@ -4,9 +4,10 @@ import { useState } from "react";
 import Upload from "../components/Upload";
 
 import getConfig from "next/config";
+import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
-
-import { parseCookies } from 'nookies';
+import { parseCookies, destroyCookie } from "nookies";
+import Link from "next/link";
 
 const Home = ({ projects }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -23,6 +24,11 @@ const Home = ({ projects }) => {
   }
 
   console.log(projects.data);
+
+  function handleClick() {
+    destroyCookie(null, "jwt");
+    toast.loading("Saliendo, espere un momento...");
+  }
 
   return (
     <section className="min-h-screen bg-primary-100">
@@ -111,25 +117,30 @@ const Home = ({ projects }) => {
             </div>
           </div>
           <div className="my-px">
-            <div className="btn-dashboard text-gray-400 hover:bg-gray-100 hover:text-gray-700">
-              <span className="flex items-center justify-center text-lg text-red-400">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                  />
-                </svg>
-              </span>
-              <span className="ml-3">Cerrar sesión</span>
-            </div>
+            <Link href="/">
+              <button
+                onClick={handleClick}
+                className="btn-dashboard text-gray-400 hover:bg-gray-100 hover:text-gray-700"
+              >
+                <span className="flex items-center justify-center text-lg text-red-400">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                    />
+                  </svg>
+                </span>
+                <span className="ml-3">Cerrar sesión</span>
+              </button>
+            </Link>
           </div>
         </div>
       </nav>
@@ -306,6 +317,8 @@ const Home = ({ projects }) => {
 
       {/* Modal Upload */}
       <Upload isOpen={isOpen} closeModal={closeModal} />
+
+      <Toaster position="bottom-center" reverseOrder={false} />
     </section>
   );
 };
@@ -322,7 +335,7 @@ export const getServerSideProps = async (ctx) => {
   // );
 
   // let jwt = data.jwt;
-  const jwt = parseCookies(ctx).jwt
+  const jwt = parseCookies(ctx).jwt;
 
   const baseUrl = `${"https://software-ing.herokuapp.com/api"}`;
 
@@ -342,7 +355,7 @@ export const getServerSideProps = async (ctx) => {
 
   return {
     props: {
-      projects: projects
+      projects: projects,
     },
   };
 };

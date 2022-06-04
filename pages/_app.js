@@ -1,11 +1,8 @@
-import { QueryClient, QueryClientProvider } from "react-query";
 import { Router } from 'next/router'
 import { parseCookies } from 'nookies';
 
 import '../styles/globals.css'
 
-
-const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps }) {
 
@@ -34,7 +31,7 @@ MyApp.getInitialProps = async ({ctx}) => {
   const jwt = parseCookies(ctx).jwt
 
   if(!jwt) {
-    if (ctx.pathname === "/") {
+    if (ctx.pathname === "/" || ctx.pathname === "/project") {
       redirectUser(ctx, "login");
     }
   }
