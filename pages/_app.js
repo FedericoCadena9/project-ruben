@@ -15,8 +15,6 @@ function MyApp({ Component, pageProps }) {
 
 
 function redirectUser(ctx, location) {
-  const router = useRouter()
-
   if(ctx.req) {
     ctx.res.writeHead(302, {
       Location: location,
@@ -24,7 +22,7 @@ function redirectUser(ctx, location) {
     });
     ctx.res.end();
   } else {
-    router.push(location);
+    useRouter.push(location);
   }
 }
 
