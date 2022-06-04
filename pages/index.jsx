@@ -347,15 +347,6 @@ export const getServerSideProps = async (ctx) => {
   // Consumo de la API para ver los datos de los proyectos
   const projects = await dataApi(`${baseUrl}/proyectos`);
 
-  if (!jwt) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    }
-  }
-
   return {
     props: {
       projects: projects,

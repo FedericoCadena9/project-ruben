@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router'
+import  Router  from 'next/router'
 import { parseCookies } from 'nookies';
 
 import '../styles/globals.css'
@@ -22,7 +22,7 @@ function redirectUser(ctx, location) {
     });
     ctx.res.end();
   } else {
-    useRouter.push(location);
+    Router.push(location);
   }
 }
 
