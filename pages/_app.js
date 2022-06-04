@@ -33,7 +33,7 @@ MyApp.getInitialProps = async ({ctx}) => {
 
   // Condicion que preguntas si existe el jwt, en caso de que no manda al Login a todas las rutas que se presenten en la condición
   if(!jwt) {
-    if (ctx.pathname === "/" || ctx.pathname === "/project") {
+    if (ctx.pathname === "/") {
       redirectUser(ctx, "/login");
     }
   }
