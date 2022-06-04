@@ -1,0 +1,21 @@
+{
+    "routes": [
+        {
+            "method": "POST",
+            "path": "/proyectos",
+            "handler": "proyectos.create",
+            "config" : {
+                "policies":[]
+            }
+        }, 
+        {
+            "method": "POST",
+            "path": "/detalleProyectos",
+            "handler": "detalleProyectos.create",
+            "config" : {
+                "policies":[]
+            }
+        } 
+    
+    ]
+}

@@ -1,8 +1,69 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { Input } from "./Input";
+import { useState } from "react";
 
-export default function Upload({ isOpen, closeModal }) {
+export default function Upload({isOpen, closeModal}) {
+  const [nombre, setnombre] = useState("");
+  const [descripcion, setdescripcion] = useState("");
+  const [fechaInicio, setfechaInicio] = useState("");
+  const [fechafin, setfechafin] = useState("");
+  const [integrantes, setintegrantes] = useState("");
+  const [requisitos, setrequisitos] = useState("");
+  
+
+  async function todos(){
+    addDepoimento();
+    adddatos();
+    closeModal
+  }
+  
+  async function adddatos() {
+    const proyectosInfo = {
+      fechaInicio: setfechaInicio,
+      fechafin: setfechafin,
+      integrantes: setintegrantes,
+      requisitos: setrequisitos
+
+
+    };
+
+    const ddetalleProyecto = await fetch("https://software-ing.herokuapp.com/api/detalleProyectos", {
+      method: "POST",
+      headers: {
+        "Accept": "apllication/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(proyectosInfo),
+    });
+    const addResponse = await add.json();
+    const projects = await dataApi(`${baseUrl}/detalleProyectos`);
+
+    console.log(addResponse);
+  }
+  
+  async function addDepoimento() {
+    const proyectosInfo = {
+      nombre: setnombre,
+      descripcion: setdescripcion
+
+    };
+
+    const proyectos= await fetch("https://software-ing.herokuapp.com/api/proyectos", {
+      method: "POST",
+      headers: {
+        "Accept": "apllication/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(proyectosInfo),
+    });
+    const addResponse = await add.json();
+    const projects = await dataApi(`${baseUrl}/proyectos`);
+
+    console.log(addResponse);
+    const jwt = parseCookies(ctx).jwt;
+  }
+
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
@@ -40,6 +101,9 @@ export default function Upload({ isOpen, closeModal }) {
 
                   <form className="mt-8 space-y-3" action="#" method="POST">
                     <Input
+                    onChange={(e) => setnombre(e.target.value)}
+                    value={nombre}
+                    name ="nombre"
                       id="nombre"
                       type="text"
                       label="Nombre del Proyecto "
@@ -48,13 +112,19 @@ export default function Upload({ isOpen, closeModal }) {
 
                     <div className="sm:flex sm:space-x-4">
                       <Input
-                        id="fechaInicio"
+                        id="fechainicio"
+                        name="fechainicio"
+                        onChange={(e) => setfechaInicio(e.target.value)}
+                        value={fechaInicio}
                         type="date"
                         label="Fecha Inicio"
                         placeholder=""
                       />
                       <Input
-                        id="fechaFin"
+                        id="fechafin"
+                        name="fechafin"
+                        onChange={(e) => setfechafin(e.target.value)}
+                        value={fechafin}
                         type="date"
                         label="Fecha Fin"
                         placeholder=""
@@ -64,6 +134,9 @@ export default function Upload({ isOpen, closeModal }) {
                     <div className="sm:flex sm:space-x-4">
                       <Input
                         id="integrantes"
+                        name="integrantes"
+                        onChange={(e) => setintegrantes(e.target.value)}
+                        value={integrantes}
                         type="number"
                         label="Integrantes "
                         placeholder="5"
@@ -84,6 +157,9 @@ export default function Upload({ isOpen, closeModal }) {
                         Descripción
                       </label>
                       <textarea
+                      onChange={(e) => setdescripcion(e.target.value)}
+                      value={descripcion}
+                      name ="descripcion"
                         rows="4"
                         id="basic"
                         placeholder="Describe tu proyecto"
@@ -99,6 +175,9 @@ export default function Upload({ isOpen, closeModal }) {
                         Requisitos
                       </label>
                       <textarea
+                      onChange={(e) => setrequisitos(e.target.value)}
+                      value={requisitos}
+                      name ="requisitos"
                         rows="4"
                         id="basic"
                         placeholder="Requsitos del proyecto..."
@@ -175,7 +254,7 @@ export default function Upload({ isOpen, closeModal }) {
                     <button
                       type="button"
                       className="btn-primary"
-                      onClick={closeModal}
+                      onClick={() => todos()}
                     >
                       Publicar proyecto
                     </button>
