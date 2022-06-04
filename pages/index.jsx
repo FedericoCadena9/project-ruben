@@ -1,10 +1,11 @@
+import toast, { Toaster } from "react-hot-toast";
+
 import { ProjectCard } from "../components/ProjectCard";
 
 import { useState } from "react";
 import Upload from "../components/Upload";
 
-import getConfig from "next/config";
-import toast, { Toaster } from "react-hot-toast";
+
 import axios from "axios";
 import { parseCookies, destroyCookie } from "nookies";
 import Link from "next/link";
@@ -13,7 +14,7 @@ const Home = ({ projects }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
-  let [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   function closeModal() {
     setIsOpen(false);
@@ -23,8 +24,10 @@ const Home = ({ projects }) => {
     setIsOpen(true);
   }
 
+  // Imprime en consola los datos de la Api de la tabla Proyectos
   console.log(projects.data);
 
+  // Función para destruir el jwt y salir de la sesión
   function handleClick() {
     destroyCookie(null, "jwt");
     toast.loading("Saliendo, espere un momento...");
@@ -323,18 +326,10 @@ const Home = ({ projects }) => {
   );
 };
 
-const { publicRuntimeConfig } = getConfig();
 
 export const getServerSideProps = async (ctx) => {
-  // const { data } = await axios.post(
-  //   "https://software-ing.herokuapp.com/api/auth/local/",
-  //   {
-  //     identifier: "test@gmail.com",
-  //     password: "test123",
-  //   }
-  // );
 
-  // let jwt = data.jwt;
+  // Variable de la Cookie que guarda el web token para poder visualizar los proyectos
   const jwt = parseCookies(ctx).jwt;
 
   const baseUrl = `${"https://software-ing.herokuapp.com/api"}`;
@@ -349,9 +344,8 @@ export const getServerSideProps = async (ctx) => {
     return data;
   };
 
+  // Consumo de la API para ver los datos de los proyectos
   const projects = await dataApi(`${baseUrl}/proyectos`);
-
-  // console.log(projects);
 
   return {
     props: {

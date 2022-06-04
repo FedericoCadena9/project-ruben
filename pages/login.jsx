@@ -1,23 +1,40 @@
+// Notification Toast Package
 import toast, { Toaster } from "react-hot-toast";
 
+// Hook React
+import { useState } from "react";
+
+// Next Packages
 import Link from "next/link";
 import Head from "next/head";
-import { Input } from "../components/Input";
-import { useState } from "react";
-import { setCookie } from "nookies";
 import Router from "next/router";
 
+// Component
+import { Input } from "../components/Input";
+
+// Cookies Package
+import { setCookie } from "nookies";
+
 const Login = () => {
+
+  // Hooks que guardan el texto que se ingresa al input
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  // Hoook para revisar el estado booleano para cambiar el tipo de Input para la contraseña
   const [showPassword, setShowPassword] = useState({ showPassword: false });
 
+
+  // Función asincrona para realizar el proceso de validación del Login
   async function handleLogin() {
+
+    // JSON que guarda los datos de los Hooks para la petición POST
     const loginInfo = {
       identifier: username,
       password: password,
     };
 
+    // Consumo de la API para el Login
     const login = await fetch(
       "https://software-ing.herokuapp.com/api/auth/local/",
       {
@@ -32,11 +49,15 @@ const Login = () => {
 
     const loginResponse = await login.json();
 
+
+    // Función que guarda la Cookie y la manda a la ruta main
     setCookie(null, "jwt", loginResponse.jwt, {
       maxAge: 30 * 24 * 60 * 60,
       path: "/",
     });
 
+
+    // Manejo de Errores e impresión de los Toast Notification
     if (loginResponse.jwt !== undefined) {
       Router.push("/");
       toast.success("Logeado correctamente");
@@ -46,6 +67,7 @@ const Login = () => {
     }
   }
 
+  // Función de cambio booleano para visualizar la contraseña
   const handleShowPassword = () => {
     setShowPassword({ showPassword: !showPassword.showPassword });
   };
@@ -56,6 +78,7 @@ const Login = () => {
         <title>| Iniciar Sesión</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
+      
       <div className="grid grid-cols-1 gap-0 lg:grid-cols-12 h-screen">
         <div className="w-full col-span-1 lg:col-span-4 lg:px-3 xl:px-0 max-w-xs place-self-center px-4 sm:px-0 sm:max-w-md">
           <div className="w-full flex justify-center">
