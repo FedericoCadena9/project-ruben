@@ -2,50 +2,46 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { Input } from "./Input";
 import { useState } from "react";
-import axios from 'axios';
+import { parseCookies } from "nookies";
+import axios from "axios";
 
-export default function Upload({isOpen, closeModal}) {
+export default function Upload({ isOpen, closeModal }) {
 
-  const [projectInfo, setprojectInfo] = useState({
-    nombre: "",
-    description: "",
-    cantidad_integrantes: "",
-    fecha_inicio: "",
-    fecha_fin: "",
-    fechaPostulacion: "",
-    requisitos_integrantes: "",
-  });
-  const handleInputChange = (event) => {
-    setprojectInfo ({
-      ...projectInfo,
-      [event.target.name]: event.target.value,
-    });
+  const [nombre, setNombre] = useState("");
+  const [fechaInicio, setFechaInicio] = useState("");
+  const [fechaFin, setFechaFin] = useState("");
+  const [integrantes, setIntegrantes] = useState("");
+  const [fechaPostulacion, setFechaPostulacion] = useState("");
+  const [descripcion, setDescripcion] = useState("");
+  const [requisitos, setRequisitos] = useState("");
 
-  };
-  const sendData = (event) => {
+  const sendData = async (event) => {
+
+    const jwt = parseCookies(event).jwt;
+
     closeModal();
-    event.preventDefault();
-    console.log(projectInfo);
-  };
-
-  
-  async function addDepoimento() {
-    const depoimentoInfo = {
-      title: projectInfo
-    };
-
-    const add = await fetch("https://software-ing.herokuapp.com/api/detalleProyectos", {
-      method: "POST",
-      headers: {
-        Accept: "apllication/json",
-        "Content-Type": "application/json",
+    const { data } = await axios.post(
+      "https://software-ing.herokuapp.com/api/detalle-proyectos",
+      {
+        data: {
+          nombre_proyecto: nombre,
+          fecha_inicio: fechaInicio,
+          fecha_fin: fechaFin,
+          cantidad_integrantes: integrantes,
+          fecha_inscripcion_usuario: fechaPostulacion,
+          descripcion: descripcion,
+          requisitos_integrantes: requisitos,
+        },
       },
-      body: JSON.stringify(depoimentoInfo),
-    });
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }
+    );
 
-    console.log(depoimentoInfo);
-  }
-
+    console.log(data);
+  };
 
   return (
     <>
@@ -82,56 +78,51 @@ export default function Upload({isOpen, closeModal}) {
                     Subir Nuevo Proyecto
                   </Dialog.Title>
 
-                  <form className="mt-8 space-y-3" action="#" method="POST">
+                  <form className="mt-8 space-y-3">
                     <Input
-                      onSubmint={sendData}
                       id="nombre"
                       type="text"
                       label="Nombre del Proyecto "
                       placeholder="Añadir nombre"
-                      onChange={handleInputChange}
-                      name="nombre"
+                      onChange={e => setNombre(e.target.value)}
+                      value={nombre}
                     />
 
                     <div className="sm:flex sm:space-x-4">
                       <Input
                         id="fecha_inicio"
-                        onSubmint={sendData}
                         type="date"
                         label="Fecha_inicio"
                         placeholder=""
-                        onChange={handleInputChange}
-                        name="fecha_inicio"
+                        onChange={e => setFechaInicio(e.target.value)}
+                        value={fechaInicio}
                       />
                       <Input
                         id="fecha_fin"
-                        onSubmint={sendData}
                         type="date"
                         label="Fecha Fin"
                         placeholder=""
-                        onChange={handleInputChange}
-                        name="fecha_fin"
+                        onChange={e => setFechaFin(e.target.value)}
+                        value={fechaFin}
                       />
                     </div>
 
                     <div className="sm:flex sm:space-x-4">
                       <Input
                         id="cantidad_integrantes"
-                        onSubmint={sendData}
                         type="number"
                         label="Integrantes "
                         placeholder="5"
-                        onChange={handleInputChange}
-                        name="cantidad_integrantes"
+                        onChange={e => setIntegrantes(e.target.value)}
+                        value={integrantes}
                       />
                       <Input
                         id="fechaPostulacion"
-                        onSubmint={sendData}
                         type="date"
                         label="Fecha Postulación"
                         placeholder=""
-                        onChange={handleInputChange}
-                        name="fechaPostulacion"
+                        onChange={e => setFechaPostulacion(e.target.value)}
+                        value={fechaPostulacion}
                       />
                     </div>
 
@@ -143,12 +134,11 @@ export default function Upload({isOpen, closeModal}) {
                         Descripción
                       </label>
                       <textarea
-                        onSubmint={sendData}
                         rows="4"
                         id="descripcion"
                         placeholder="Describe tu proyecto"
-                        onChange={handleInputChange}
-                        name="description"
+                        onChange={e => setDescripcion(e.target.value)}
+                        value={descripcion}
                         className="block w-full rounded-md border-gray-200 text-sm transition focus:border-blue-600 focus:ring-blue-600 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:opacity-75"
                       ></textarea>
                     </div>
@@ -161,12 +151,11 @@ export default function Upload({isOpen, closeModal}) {
                         Requisitos
                       </label>
                       <textarea
-                      onSubmint={sendData}
                         rows="4"
                         id="requisitos_integrantes"
                         placeholder="Requsitos del proyecto..."
-                        onChange={handleInputChange}
-                        name="requisitos_integrantes"
+                        onChange={e => setRequisitos(e.target.value)}
+                        value={requisitos}
                         className="block w-full rounded-md border-gray-200 text-sm transition focus:border-blue-600 focus:ring-blue-600 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:opacity-75"
                       ></textarea>
                     </div>
@@ -223,30 +212,28 @@ export default function Upload({isOpen, closeModal}) {
                             </span>
                           </span>
                         </span>
-                        <input id="photo-dropbox" type="file" className="sr-only" />
+                        <input
+                          id="photo-dropbox"
+                          type="file"
+                          className="sr-only"
+                        />
                       </label>
                     </div>
+
+                    <div className="mt-4 flex space-x-4">
+                      <button
+                        type="button"
+                        className="btn bg-slate-200 text-slate-600 hover:bg-slate-300 hover:text-gray-800"
+                        onClick={closeModal}
+                      >
+                        Cancelar
+                      </button>
+
+                      <button type="button" onClick={() => sendData() } className="btn-primary">
+                        Publicar proyecto
+                      </button>
+                    </div>
                   </form>
-
-                  <div className="mt-4 flex space-x-4">
-                  <button
-                      type="button"
-                      className="btn bg-slate-200 text-slate-600 hover:bg-slate-300 hover:text-gray-800"
-                      onClick={closeModal}
-                    >
-                      Cancelar
-                    </button>
-
-                    <button
-                      type="submit"
-                      className="btn-primary"
-                      onClick={(e) => addDepoimento()}
-                    >
-                      Publicar proyecto
-                    </button>
-
-                    
-                  </div>
                 </Dialog.Panel>
               </Transition.Child>
             </div>
