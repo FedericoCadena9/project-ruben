@@ -1,6 +1,51 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { Input } from "./Input";
+<<<<<<< Updated upstream
+=======
+import { useState } from "react";
+import { parseCookies } from "nookies";
+import axios from "axios";
+
+export default function Upload({ isOpen, closeModal }) {
+
+  const [nombre, setNombre] = useState("");
+  const [fechaInicio, setFechaInicio] = useState("");
+  const [fechaFin, setFechaFin] = useState("");
+  const [integrantes, setIntegrantes] = useState("");
+  const [fechaPostulacion, setFechaPostulacion] = useState("");
+  const [descripcion, setDescripcion] = useState("");
+  const [requisitos, setRequisitos] = useState("");
+
+  const sendData = async (event) => {
+
+    const jwt = parseCookies(event).jwt;
+
+    closeModal();
+    event.preventDefault();
+    const { data } = await axios.post(
+      "https://software-ing.herokuapp.com/api/detalle-proyectos",
+      {
+        data: {
+          nombre_proyecto: nombre,
+          fecha_inicio: fechaInicio,
+          fecha_fin: fechaFin,
+          cantidad_integrantes: integrantes,
+          fecha_inscripcion_usuario: fechaPostulacion,
+          descripcion: descripcion,
+          requisitos_integrantes: requisitos,
+        },
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }
+    );
+
+    console.log(data);
+  };
+>>>>>>> Stashed changes
 
 export default function Upload({ isOpen, closeModal }) {
   return (
@@ -38,41 +83,77 @@ export default function Upload({ isOpen, closeModal }) {
                     Subir Nuevo Proyecto
                   </Dialog.Title>
 
-                  <form className="mt-8 space-y-3" action="#" method="POST">
+                  <form className="mt-8 space-y-3" onSubmit={sendData}>
                     <Input
                       id="nombre"
                       type="text"
                       label="Nombre del Proyecto "
                       placeholder="Añadir nombre"
+<<<<<<< Updated upstream
+=======
+                      onChange={e => setNombre(e.target.value)}
+                      value={nombre}
+>>>>>>> Stashed changes
                     />
 
                     <div className="sm:flex sm:space-x-4">
                       <Input
+<<<<<<< Updated upstream
                         id="fechaInicio"
+=======
+                        id="fecha_inicio"
+>>>>>>> Stashed changes
                         type="date"
                         label="Fecha Inicio"
                         placeholder=""
+<<<<<<< Updated upstream
                       />
                       <Input
                         id="fechaFin"
                         type="date"
                         label="Fecha Fin"
                         placeholder=""
+=======
+                        onChange={e => setFechaInicio(e.target.value)}
+                        value={fechaInicio}
+                      />
+                      <Input
+                        id="fecha_fin"
+                        type="date"
+                        label="Fecha Fin"
+                        placeholder=""
+                        onChange={e => setFechaFin(e.target.value)}
+                        value={fechaFin}
+>>>>>>> Stashed changes
                       />
                     </div>
 
                     <div className="sm:flex sm:space-x-4">
                       <Input
+<<<<<<< Updated upstream
                         id="integrantes"
                         type="number"
                         label="Integrantes "
                         placeholder="5"
+=======
+                        id="cantidad_integrantes"
+                        type="number"
+                        label="Integrantes "
+                        placeholder="5"
+                        onChange={e => setIntegrantes(e.target.value)}
+                        value={integrantes}
+>>>>>>> Stashed changes
                       />
                       <Input
                         id="fechaPostulacion"
                         type="date"
                         label="Fecha Postulación"
                         placeholder=""
+<<<<<<< Updated upstream
+=======
+                        onChange={e => setFechaPostulacion(e.target.value)}
+                        value={fechaPostulacion}
+>>>>>>> Stashed changes
                       />
                     </div>
 
@@ -87,6 +168,11 @@ export default function Upload({ isOpen, closeModal }) {
                         rows="4"
                         id="basic"
                         placeholder="Describe tu proyecto"
+<<<<<<< Updated upstream
+=======
+                        onChange={e => setDescripcion(e.target.value)}
+                        value={descripcion}
+>>>>>>> Stashed changes
                         className="block w-full rounded-md border-gray-200 text-sm transition focus:border-blue-600 focus:ring-blue-600 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:opacity-75"
                       ></textarea>
                     </div>
@@ -102,6 +188,11 @@ export default function Upload({ isOpen, closeModal }) {
                         rows="4"
                         id="basic"
                         placeholder="Requsitos del proyecto..."
+<<<<<<< Updated upstream
+=======
+                        onChange={e => setRequisitos(e.target.value)}
+                        value={requisitos}
+>>>>>>> Stashed changes
                         className="block w-full rounded-md border-gray-200 text-sm transition focus:border-blue-600 focus:ring-blue-600 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:opacity-75"
                       ></textarea>
                     </div>
@@ -158,20 +249,15 @@ export default function Upload({ isOpen, closeModal }) {
                             </span>
                           </span>
                         </span>
-                        <input id="photo-dropbox" type="file" className="sr-only" />
+                        <input
+                          id="photo-dropbox"
+                          type="file"
+                          className="sr-only"
+                        />
                       </label>
                     </div>
-                  </form>
 
-                  <div className="mt-4 flex space-x-4">
-                  <button
-                      type="button"
-                      className="btn bg-slate-200 text-slate-600 hover:bg-slate-300 hover:text-gray-800"
-                      onClick={closeModal}
-                    >
-                      Cancelar
-                    </button>
-
+<<<<<<< Updated upstream
                     <button
                       type="button"
                       className="btn-primary"
@@ -179,9 +265,22 @@ export default function Upload({ isOpen, closeModal }) {
                     >
                       Publicar proyecto
                     </button>
+=======
+                    <div className="mt-4 flex space-x-4">
+                      <button
+                        type="button"
+                        className="btn bg-slate-200 text-slate-600 hover:bg-slate-300 hover:text-gray-800"
+                        onClick={closeModal}
+                      >
+                        Cancelar
+                      </button>
+>>>>>>> Stashed changes
 
-                    
-                  </div>
+                      <button type="submit" className="btn-primary">
+                        Publicar proyecto
+                      </button>
+                    </div>
+                  </form>
                 </Dialog.Panel>
               </Transition.Child>
             </div>

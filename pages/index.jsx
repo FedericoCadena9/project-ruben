@@ -25,7 +25,7 @@ const Home = ({ projects }) => {
   }
 
   // Imprime en consola los datos de la Api de la tabla Proyectos
-  console.log(projects.data);
+  // console.log(projects.data);
 
   // Función para destruir el jwt y salir de la sesión
   function handleClick() {
@@ -331,6 +331,7 @@ export const getServerSideProps = async (ctx) => {
 
   // Variable de la Cookie que guarda el web token para poder visualizar los proyectos
   const jwt = parseCookies(ctx).jwt;
+  console.log(jwt);
 
   const baseUrl = `${"https://software-ing.herokuapp.com/api"}`;
 
