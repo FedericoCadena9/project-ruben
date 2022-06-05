@@ -2,67 +2,50 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { Input } from "./Input";
 import { useState } from "react";
+import axios from 'axios';
 
 export default function Upload({isOpen, closeModal}) {
-  const [nombre, setnombre] = useState("");
-  const [descripcion, setdescripcion] = useState("");
-  const [fechaInicio, setfechaInicio] = useState("");
-  const [fechafin, setfechafin] = useState("");
-  const [integrantes, setintegrantes] = useState("");
-  const [requisitos, setrequisitos] = useState("");
-  
 
-  async function todos(){
-    addDepoimento();
-    adddatos();
-    closeModal
-  }
-  
-  async function adddatos() {
-    const proyectosInfo = {
-      fechaInicio: setfechaInicio,
-      fechafin: setfechafin,
-      integrantes: setintegrantes,
-      requisitos: setrequisitos
-
-
-    };
-
-    const ddetalleProyecto = await fetch("https://software-ing.herokuapp.com/api/detalleProyectos", {
-      method: "POST",
-      headers: {
-        "Accept": "apllication/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(proyectosInfo),
+  const [projectInfo, setprojectInfo] = useState({
+    nombre: "",
+    description: "",
+    cantidad_integrantes: "",
+    fecha_inicio: "",
+    fecha_fin: "",
+    fechaPostulacion: "",
+    requisitos_integrantes: "",
+  });
+  const handleInputChange = (event) => {
+    setprojectInfo ({
+      ...projectInfo,
+      [event.target.name]: event.target.value,
     });
-    const addResponse = await add.json();
-    const projects = await dataApi(`${baseUrl}/detalleProyectos`);
 
-    console.log(addResponse);
-  }
+  };
+  const sendData = (event) => {
+    closeModal();
+    event.preventDefault();
+    console.log(projectInfo);
+  };
+
   
   async function addDepoimento() {
-    const proyectosInfo = {
-      nombre: setnombre,
-      descripcion: setdescripcion
-
+    const depoimentoInfo = {
+      title: projectInfo
     };
 
-    const proyectos= await fetch("https://software-ing.herokuapp.com/api/proyectos", {
+    const add = await fetch("https://software-ing.herokuapp.com/api/detalleProyectos", {
       method: "POST",
       headers: {
-        "Accept": "apllication/json",
+        Accept: "apllication/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(proyectosInfo),
+      body: JSON.stringify(depoimentoInfo),
     });
-    const addResponse = await add.json();
-    const projects = await dataApi(`${baseUrl}/proyectos`);
 
-    console.log(addResponse);
-    const jwt = parseCookies(ctx).jwt;
+    console.log(depoimentoInfo);
   }
+
 
   return (
     <>
@@ -101,51 +84,54 @@ export default function Upload({isOpen, closeModal}) {
 
                   <form className="mt-8 space-y-3" action="#" method="POST">
                     <Input
-                    onChange={(e) => setnombre(e.target.value)}
-                    value={nombre}
-                    name ="nombre"
+                      onSubmint={sendData}
                       id="nombre"
                       type="text"
                       label="Nombre del Proyecto "
                       placeholder="Añadir nombre"
+                      onChange={handleInputChange}
+                      name="nombre"
                     />
 
                     <div className="sm:flex sm:space-x-4">
                       <Input
-                        id="fechainicio"
-                        name="fechainicio"
-                        onChange={(e) => setfechaInicio(e.target.value)}
-                        value={fechaInicio}
+                        id="fecha_inicio"
+                        onSubmint={sendData}
                         type="date"
-                        label="Fecha Inicio"
+                        label="Fecha_inicio"
                         placeholder=""
+                        onChange={handleInputChange}
+                        name="fecha_inicio"
                       />
                       <Input
-                        id="fechafin"
-                        name="fechafin"
-                        onChange={(e) => setfechafin(e.target.value)}
-                        value={fechafin}
+                        id="fecha_fin"
+                        onSubmint={sendData}
                         type="date"
                         label="Fecha Fin"
                         placeholder=""
+                        onChange={handleInputChange}
+                        name="fecha_fin"
                       />
                     </div>
 
                     <div className="sm:flex sm:space-x-4">
                       <Input
-                        id="integrantes"
-                        name="integrantes"
-                        onChange={(e) => setintegrantes(e.target.value)}
-                        value={integrantes}
+                        id="cantidad_integrantes"
+                        onSubmint={sendData}
                         type="number"
                         label="Integrantes "
                         placeholder="5"
+                        onChange={handleInputChange}
+                        name="cantidad_integrantes"
                       />
                       <Input
                         id="fechaPostulacion"
+                        onSubmint={sendData}
                         type="date"
                         label="Fecha Postulación"
                         placeholder=""
+                        onChange={handleInputChange}
+                        name="fechaPostulacion"
                       />
                     </div>
 
@@ -157,12 +143,12 @@ export default function Upload({isOpen, closeModal}) {
                         Descripción
                       </label>
                       <textarea
-                      onChange={(e) => setdescripcion(e.target.value)}
-                      value={descripcion}
-                      name ="descripcion"
+                        onSubmint={sendData}
                         rows="4"
-                        id="basic"
+                        id="descripcion"
                         placeholder="Describe tu proyecto"
+                        onChange={handleInputChange}
+                        name="description"
                         className="block w-full rounded-md border-gray-200 text-sm transition focus:border-blue-600 focus:ring-blue-600 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:opacity-75"
                       ></textarea>
                     </div>
@@ -175,12 +161,12 @@ export default function Upload({isOpen, closeModal}) {
                         Requisitos
                       </label>
                       <textarea
-                      onChange={(e) => setrequisitos(e.target.value)}
-                      value={requisitos}
-                      name ="requisitos"
+                      onSubmint={sendData}
                         rows="4"
-                        id="basic"
+                        id="requisitos_integrantes"
                         placeholder="Requsitos del proyecto..."
+                        onChange={handleInputChange}
+                        name="requisitos_integrantes"
                         className="block w-full rounded-md border-gray-200 text-sm transition focus:border-blue-600 focus:ring-blue-600 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:opacity-75"
                       ></textarea>
                     </div>
@@ -252,9 +238,9 @@ export default function Upload({isOpen, closeModal}) {
                     </button>
 
                     <button
-                      type="button"
+                      type="submit"
                       className="btn-primary"
-                      onClick={() => todos()}
+                      onClick={(e) => addDepoimento()}
                     >
                       Publicar proyecto
                     </button>
