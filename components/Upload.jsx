@@ -7,6 +7,7 @@ import axios from "axios";
 
 export default function Upload({ isOpen, closeModal }) {
 
+  // Hooks que controlan y guardan la informaión de los Inputs
   const [nombre, setNombre] = useState("");
   const [fechaInicio, setFechaInicio] = useState("");
   const [fechaFin, setFechaFin] = useState("");
@@ -15,11 +16,15 @@ export default function Upload({ isOpen, closeModal }) {
   const [descripcion, setDescripcion] = useState("");
   const [requisitos, setRequisitos] = useState("");
 
+  // Función asincrona para mandar los datos a la BD
   const sendData = async (event) => {
 
+    // Varible que guarda el token que se encuentra en las cookies para poder acceder a los metodos de la BD
     const jwt = parseCookies(event).jwt;
 
     closeModal();
+
+    // Función con metodo POST donde se indican los campos a agregar de la tabla con la información obtenida en los Inputs
     const { data } = await axios.post(
       "https://software-ing.herokuapp.com/api/detalle-proyectos",
       {
@@ -39,8 +44,6 @@ export default function Upload({ isOpen, closeModal }) {
         },
       }
     );
-
-    console.log(data);
   };
 
   return (
