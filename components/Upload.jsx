@@ -1,8 +1,52 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { Input } from "./Input";
+import { useState } from "react";
+import axios from 'axios';
 
-export default function Upload({ isOpen, closeModal }) {
+export default function Upload({isOpen, closeModal}) {
+
+  const [projectInfo, setprojectInfo] = useState({
+    nombre: "",
+    description: "",
+    cantidad_integrantes: "",
+    fecha_inicio: "",
+    fecha_fin: "",
+    fechaPostulacion: "",
+    requisitos_integrantes: "",
+  });
+  const handleInputChange = (event) => {
+    setprojectInfo ({
+      ...projectInfo,
+      [event.target.name]: event.target.value,
+    });
+
+  };
+  const sendData = (event) => {
+    closeModal();
+    event.preventDefault();
+    console.log(projectInfo);
+  };
+
+  
+  async function addDepoimento() {
+    const depoimentoInfo = {
+      title: projectInfo
+    };
+
+    const add = await fetch("https://software-ing.herokuapp.com/api/detalleProyectos", {
+      method: "POST",
+      headers: {
+        Accept: "apllication/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(depoimentoInfo),
+    });
+
+    console.log(depoimentoInfo);
+  }
+
+
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
@@ -40,39 +84,54 @@ export default function Upload({ isOpen, closeModal }) {
 
                   <form className="mt-8 space-y-3" action="#" method="POST">
                     <Input
+                      onSubmint={sendData}
                       id="nombre"
                       type="text"
                       label="Nombre del Proyecto "
                       placeholder="Añadir nombre"
+                      onChange={handleInputChange}
+                      name="nombre"
                     />
 
                     <div className="sm:flex sm:space-x-4">
                       <Input
-                        id="fechaInicio"
+                        id="fecha_inicio"
+                        onSubmint={sendData}
                         type="date"
-                        label="Fecha Inicio"
+                        label="Fecha_inicio"
                         placeholder=""
+                        onChange={handleInputChange}
+                        name="fecha_inicio"
                       />
                       <Input
-                        id="fechaFin"
+                        id="fecha_fin"
+                        onSubmint={sendData}
                         type="date"
                         label="Fecha Fin"
                         placeholder=""
+                        onChange={handleInputChange}
+                        name="fecha_fin"
                       />
                     </div>
 
                     <div className="sm:flex sm:space-x-4">
                       <Input
-                        id="integrantes"
+                        id="cantidad_integrantes"
+                        onSubmint={sendData}
                         type="number"
                         label="Integrantes "
                         placeholder="5"
+                        onChange={handleInputChange}
+                        name="cantidad_integrantes"
                       />
                       <Input
                         id="fechaPostulacion"
+                        onSubmint={sendData}
                         type="date"
                         label="Fecha Postulación"
                         placeholder=""
+                        onChange={handleInputChange}
+                        name="fechaPostulacion"
                       />
                     </div>
 
@@ -84,9 +143,12 @@ export default function Upload({ isOpen, closeModal }) {
                         Descripción
                       </label>
                       <textarea
+                        onSubmint={sendData}
                         rows="4"
-                        id="basic"
+                        id="descripcion"
                         placeholder="Describe tu proyecto"
+                        onChange={handleInputChange}
+                        name="description"
                         className="block w-full rounded-md border-gray-200 text-sm transition focus:border-blue-600 focus:ring-blue-600 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:opacity-75"
                       ></textarea>
                     </div>
@@ -99,9 +161,12 @@ export default function Upload({ isOpen, closeModal }) {
                         Requisitos
                       </label>
                       <textarea
+                      onSubmint={sendData}
                         rows="4"
-                        id="basic"
+                        id="requisitos_integrantes"
                         placeholder="Requsitos del proyecto..."
+                        onChange={handleInputChange}
+                        name="requisitos_integrantes"
                         className="block w-full rounded-md border-gray-200 text-sm transition focus:border-blue-600 focus:ring-blue-600 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:opacity-75"
                       ></textarea>
                     </div>
@@ -173,9 +238,9 @@ export default function Upload({ isOpen, closeModal }) {
                     </button>
 
                     <button
-                      type="button"
+                      type="submit"
                       className="btn-primary"
-                      onClick={closeModal}
+                      onClick={(e) => addDepoimento()}
                     >
                       Publicar proyecto
                     </button>
