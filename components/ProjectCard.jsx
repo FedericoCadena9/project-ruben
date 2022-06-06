@@ -19,14 +19,11 @@ export const ProjectCard = () => {
           </div>
           <div className="mt-4 space-y-2">
             <p className="text-gray-700 text-lg font-semibold">
-              {/* {project.titulo} */}
-              Titulo del proyecto
+            {project.nombre_proyecto}
 
             </p>
             <p className="text-gray-400 text-sm">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-              Doloribus dolorem consequatur, ad, suscipit laudantium voluptates
-              esse laboriosam commodi temporibus quam sed ex omnis maiores nisi.
+            {project.descripcion}
             </p>
             <div className="flex gap-6 pt-3">
               <div className="flex justify-center items-center space-x-2 text-gray-400 text-sm">
@@ -44,7 +41,14 @@ export const ProjectCard = () => {
                     d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
                   />
                 </svg>
-                <p>Biomedicina</p>
+                <div className="sm:w-48 space-y-0.5 md:w-full lg:w-48">
+                    <select
+                      id="basic"
+                      className="block w-full truncate rounded-md border-white pl-12 pr-8 text-sm transition text-gray-400 "
+                    >
+                      <option value="">Categoría</option>
+                      <option>{project.categorias_proyectos}</option> </select>
+                  </div>
               </div>
               <div className="flex justify-center items-center space-x-2 text-gray-400 text-sm">
                 <svg
@@ -61,7 +65,9 @@ export const ProjectCard = () => {
                     d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                <p>Presencial </p>
+                <p>
+                  {project.fecha_inscripción_usuario}
+                 </p>
               </div>
             </div>
           </div>
@@ -70,3 +76,4 @@ export const ProjectCard = () => {
     </>
   );
 };
+
