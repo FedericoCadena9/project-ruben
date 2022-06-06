@@ -1,9 +1,35 @@
 import Image from "next/image";
-import Link from 'next/link';
+import Link from "next/link";
 import Head from "next/head";
 import { Input } from "../components/Input";
-
+import { useState } from "react";
+import axios from "axios";
+import { parseCookies } from "nookies";
 const Register = () => {
+  const [usuarioCorreo, setUsuarioCorreo] = useState("");
+  // const [usuarioTelefono, setUsuarioTelefono] = useState("");
+  // const [usuarioContrasenia, setUsuarioContrasenia] = useState("");
+
+  const addUser = async () => {
+    /*const usuariosInfo ={
+    correo: usuarioCorreo,
+    telefono: usuarioTelefono,
+    };*/
+    axios
+      .post("https://software-ing.herokuapp.com/api/auth/local/register", {
+        username: "userTest",
+        email: "test@test.com",
+        password: "Password",
+      })
+      .then((response) => {
+        console.log("User profile", response.data.user);
+        console.log("User token", response.data.jwt);
+      })
+      .catch((error) => {
+        console.log("An error occurred:", error.response);
+      });
+
+  };
   return (
     <section className="min-h-screen flex items-center justify-center">
       <div className="w-full lg:px-3 xl:px-0 place-self-center px-4 sm:px-0 sm:max-w-md">
@@ -49,6 +75,8 @@ const Register = () => {
             <Input
               id="correo"
               type="email"
+              onChange={(e) => setUsuarioCorreo(e.target.value)}
+              value={usuarioCorreo}
               label="Correo Electrónico"
               placeholder="a12345678@correo.edu.mx"
             />
@@ -57,6 +85,8 @@ const Register = () => {
             <Input
               id="telefono"
               type="text"
+              // onChange={(e)=>setUsuarioTelefono(e.target.value)}
+              // value={usuarioTelefono}
               label="Teléfono (Opcional)"
               placeholder="555 666 7777"
             />
@@ -65,6 +95,8 @@ const Register = () => {
             <Input
               id="password"
               type="password"
+              // onChange={(e)=>setUsuarioContrasenia(e.target.value)}
+              // value={usuarioContrasenia}
               label="Contraseña"
               placeholder="Al menos 8 caracteres"
             />
@@ -80,7 +112,9 @@ const Register = () => {
 
           <div className="flex items-center justify-center my-10">
             <Link href="/registerPersonal">
-              <a className="btn-primary">Siguiente</a>
+              <a className="btn-primary" onClick={() => addUser()}>
+                Siguiente
+              </a>
             </Link>
           </div>
         </form>
@@ -94,7 +128,6 @@ const Register = () => {
         </div>
       </div>
     </section>
-  )
-}
-
-export default Register
+  );
+};
+export default Register;
