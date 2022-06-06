@@ -19,7 +19,9 @@ export const ProjectCard = () => {
           </div>
           <div className="mt-4 space-y-2">
             <p className="text-gray-700 text-lg font-semibold">
+              {/* {project.titulo} */}
               Titulo del proyecto
+
             </p>
             <p className="text-gray-400 text-sm">
               Lorem ipsum dolor sit, amet consectetur adipisicing elit.

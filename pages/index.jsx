@@ -5,7 +5,6 @@ import { ProjectCard } from "../components/ProjectCard";
 import { useState } from "react";
 import Upload from "../components/Upload";
 
-
 import axios from "axios";
 import { parseCookies, destroyCookie } from "nookies";
 import Link from "next/link";
@@ -25,7 +24,7 @@ const Home = ({ projects }) => {
   }
 
   // Imprime en consola los datos de la Api de la tabla Proyectos
-  // console.log(projects.data);
+  console.log(projects.data);
 
   // Función para destruir el jwt y salir de la sesión
   function handleClick() {
@@ -289,14 +288,9 @@ const Home = ({ projects }) => {
         </header>
         <div className="pt-20 sm:pt-0">
           <div className="flex flex-wrap items-center justify-center  gap-4 mx-8">
-            <ProjectCard />
-            <ProjectCard />
-            <ProjectCard />
-            <ProjectCard />
-            <ProjectCard />
-            <ProjectCard />
-            <ProjectCard />
-            <ProjectCard />
+            {projects.data.map((item) => (
+              <ProjectCard key={item.attributes.projectId} {...item.attributes} />
+            ))}
           </div>
           <div className="relative z-0 flex justify-center my-8 -space-x-px">
             <button
@@ -326,9 +320,7 @@ const Home = ({ projects }) => {
   );
 };
 
-
 export const getServerSideProps = async (ctx) => {
-
   // Variable de la Cookie que guarda el web token para poder visualizar los proyectos
   const jwt = parseCookies(ctx).jwt;
   console.log(jwt);
@@ -346,7 +338,7 @@ export const getServerSideProps = async (ctx) => {
   };
 
   // Consumo de la API para ver los datos de los proyectos
-  const projects = await dataApi(`${baseUrl}/proyectos`);
+  const projects = await dataApi(`${baseUrl}/detalle-proyectos`);
 
   return {
     props: {
