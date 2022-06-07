@@ -1,14 +1,18 @@
 import  Router  from 'next/router'
 import { parseCookies } from 'nookies';
+import { QueryClient, QueryClientProvider } from "react-query";
 
 import '../styles/globals.css'
 
+const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps }) {
 
   return (
     <>
-          <Component {...pageProps} />
+          <QueryClientProvider client={queryClient}>
+            <Component {...pageProps} />
+          </QueryClientProvider>
     </>
   )
 }

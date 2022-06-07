@@ -18,4 +18,9 @@
     .btn {
         @apply text-center w-full py-3 text-sm px-6 rounded ;
     }
+
+    .btnPagination {
+        @apply inline-flex w-auto cursor-pointer select-none appearance-none items-center justify-center border border-gray-200 bg-white px-6 py-3 text-xs font-medium text-gray-800 transition hover:border-gray-300 hover:bg-primary-500 active:bg-primary-500 focus:z-10 hover:text-white active:text-white focus:border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300;
+      }
+    
 }

@@ -75,7 +75,7 @@ const Login = () => {
   return (
     <>
       <Head>
-        <title>| Iniciar Sesión</title>
+        <title>ITESHU | Iniciar Sesión</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       
