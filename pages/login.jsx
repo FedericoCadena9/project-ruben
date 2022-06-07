@@ -16,7 +16,6 @@ import { Input } from "../components/Input";
 import { setCookie } from "nookies";
 
 const Login = () => {
-
   // Hooks que guardan el texto que se ingresa al input
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -24,10 +23,11 @@ const Login = () => {
   // Hoook para revisar el estado booleano para cambiar el tipo de Input para la contraseña
   const [showPassword, setShowPassword] = useState({ showPassword: false });
 
+  // Hook para mostrar estilos de error en input
+  const [error, setError] = useState(false);
 
   // Función asincrona para realizar el proceso de validación del Login
   async function handleLogin() {
-
     // JSON que guarda los datos de los Hooks para la petición POST
     const loginInfo = {
       identifier: username,
@@ -49,21 +49,24 @@ const Login = () => {
 
     const loginResponse = await login.json();
 
-
     // Función que guarda la Cookie y la manda a la ruta main
     setCookie(null, "jwt", loginResponse.jwt, {
       maxAge: 30 * 24 * 60 * 60,
       path: "/",
     });
 
-
     // Manejo de Errores e impresión de los Toast Notification
     if (loginResponse.jwt !== undefined) {
       Router.push("/");
       toast.success("Logeado correctamente");
-    }
-    else {
+    } else {
       toast.error("Correo electrónico o contraseña incorrectos.");
+    }
+
+    // Validacion de Correo
+    const reg = /^[a-z0-9]+@(iteshu.edu.mx)$/;
+    if (reg.test(username) === false) {
+      setError((error = true));
     }
   }
 
@@ -78,7 +81,7 @@ const Login = () => {
         <title>ITESHU | Iniciar Sesión</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      
+
       <div className="grid grid-cols-1 gap-0 lg:grid-cols-12 h-screen">
         <div className="w-full col-span-1 lg:col-span-4 lg:px-3 xl:px-0 max-w-xs place-self-center px-4 sm:px-0 sm:max-w-md">
           <div className="w-full flex justify-center">
@@ -102,15 +105,22 @@ const Login = () => {
           </div>
           <form className="mt-6">
             <div className="space-y-4">
-              <Input
-                id="correo"
-                type="email"
-                label="Correo Electrónico"
-                placeholder="a12345678@correo.edu.mx"
-                onChange={(e) => setUsername(e.target.value)}
-                value={username}
-              />
-
+              <div onClick={() => setError(false)}>
+                <Input
+                  id="correo"
+                  type="email"
+                  label="Correo Electrónico"
+                  placeholder="a12345678@correo.edu.mx"
+                  onChange={(e) => setUsername(e.target.value)}
+                  value={username}
+                  error={error ? "ring-1 ring-red-600" : ""}
+                />
+              </div>
+              {error && (
+                <span className="pt-1 text-xs font-medium text-red-600">
+                  El correo es inválido.
+                </span>
+              )}
               <div className="w-full space-y-2">
                 <label
                   htmlFor="password"
@@ -125,7 +135,8 @@ const Login = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Contraseña"
-                    className="block w-full h-11 rounded-md placeholder:text-gray-400 border-gray-300 text-sm transition focus-within:text-gray-800 focus:border-blue-600 focus:ring-blue-600 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:opacity-75"
+                    className={`${error ? "ring-1 ring-red-600" : ""} block w-full h-11 rounded-md placeholder:text-gray-400 border-gray-300 text-sm transition focus-within:text-gray-800 focus:border-blue-600 focus:ring-blue-600 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:opacity-75`}
+                    
                   />
                   <div
                     onClick={handleShowPassword}
@@ -173,13 +184,7 @@ const Login = () => {
                 </div>
               </div>
             </div>
-
-            <div className="mt-2">
-              <Link href="/forgot-password">
-                <a className="link">Olvidé mi contraseña</a>
-              </Link>
-            </div>
-
+            
             <div className="flex items-center justify-center my-10">
               <button
                 type="button"

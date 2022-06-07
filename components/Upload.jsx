@@ -1,3 +1,6 @@
+// Notification Toast Package
+import toast, { Toaster } from "react-hot-toast";
+
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { Input } from "./Input";
@@ -6,7 +9,6 @@ import { parseCookies } from "nookies";
 import axios from "axios";
 
 export default function Upload({ isOpen, closeModal }) {
-
   // Hooks que controlan y guardan la informaión de los Inputs
   const [nombre, setNombre] = useState("");
   const [fechaInicio, setFechaInicio] = useState("");
@@ -16,34 +18,47 @@ export default function Upload({ isOpen, closeModal }) {
   const [descripcion, setDescripcion] = useState("");
   const [requisitos, setRequisitos] = useState("");
 
+
+  // Hook para mostrar estilos de error en input
+  const [error, setError] = useState(false);
+
   // Función asincrona para mandar los datos a la BD
   const sendData = async (event) => {
-
     // Varible que guarda el token que se encuentra en las cookies para poder acceder a los metodos de la BD
     const jwt = parseCookies(event).jwt;
 
-    closeModal();
+    // Notificaciones Status Proyecto
+    if (nombre || fechaInicio == "") {
+      setError((error = true));
+      toast.error("Error, algunos campos son obligatorios");
+    } else {
 
-    // Función con metodo POST donde se indican los campos a agregar de la tabla con la información obtenida en los Inputs
-    const { data } = await axios.post(
-      "https://software-ing.herokuapp.com/api/detalle-proyectos",
-      {
-        data: {
-          nombre_proyecto: nombre,
-          fecha_inicio: fechaInicio,
-          fecha_fin: fechaFin,
-          cantidad_integrantes: integrantes,
-          fecha_inscripcion_usuario: fechaPostulacion,
-          descripcion: descripcion,
-          requisitos_integrantes: requisitos,
+      closeModal();
+
+      // Función con metodo POST donde se indican los campos a agregar de la tabla con la información obtenida en los Inputs
+      const { data } = await axios.post(
+        "https://software-ing.herokuapp.com/api/detalle-proyectos",
+        {
+          data: {
+            nombre_proyecto: nombre,
+            fecha_inicio: fechaInicio,
+            fecha_fin: fechaFin,
+            cantidad_integrantes: integrantes,
+            fecha_inscripcion_usuario: fechaPostulacion,
+            descripcion: descripcion,
+            requisitos_integrantes: requisitos,
+          },
         },
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      }
-    );
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
+        }
+      );
+
+      setError((error = true));
+      toast.success("Proyecto agregado correctamente.");
+    }
   };
 
   return (
@@ -87,7 +102,7 @@ export default function Upload({ isOpen, closeModal }) {
                       type="text"
                       label="Nombre del Proyecto "
                       placeholder="Añadir nombre"
-                      onChange={e => setNombre(e.target.value)}
+                      onChange={(e) => setNombre(e.target.value)}
                       value={nombre}
                     />
 
@@ -97,7 +112,7 @@ export default function Upload({ isOpen, closeModal }) {
                         type="date"
                         label="Fecha_inicio"
                         placeholder=""
-                        onChange={e => setFechaInicio(e.target.value)}
+                        onChange={(e) => setFechaInicio(e.target.value)}
                         value={fechaInicio}
                       />
                       <Input
@@ -105,7 +120,7 @@ export default function Upload({ isOpen, closeModal }) {
                         type="date"
                         label="Fecha Fin"
                         placeholder=""
-                        onChange={e => setFechaFin(e.target.value)}
+                        onChange={(e) => setFechaFin(e.target.value)}
                         value={fechaFin}
                       />
                     </div>
@@ -116,7 +131,7 @@ export default function Upload({ isOpen, closeModal }) {
                         type="number"
                         label="Integrantes "
                         placeholder="5"
-                        onChange={e => setIntegrantes(e.target.value)}
+                        onChange={(e) => setIntegrantes(e.target.value)}
                         value={integrantes}
                       />
                       <Input
@@ -124,7 +139,7 @@ export default function Upload({ isOpen, closeModal }) {
                         type="date"
                         label="Fecha Postulación"
                         placeholder=""
-                        onChange={e => setFechaPostulacion(e.target.value)}
+                        onChange={(e) => setFechaPostulacion(e.target.value)}
                         value={fechaPostulacion}
                       />
                     </div>
@@ -140,7 +155,7 @@ export default function Upload({ isOpen, closeModal }) {
                         rows="4"
                         id="descripcion"
                         placeholder="Describe tu proyecto"
-                        onChange={e => setDescripcion(e.target.value)}
+                        onChange={(e) => setDescripcion(e.target.value)}
                         value={descripcion}
                         className="block w-full rounded-md border-gray-200 text-sm transition focus:border-blue-600 focus:ring-blue-600 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:opacity-75"
                       ></textarea>
@@ -157,7 +172,7 @@ export default function Upload({ isOpen, closeModal }) {
                         rows="4"
                         id="requisitos_integrantes"
                         placeholder="Requsitos del proyecto..."
-                        onChange={e => setRequisitos(e.target.value)}
+                        onChange={(e) => setRequisitos(e.target.value)}
                         value={requisitos}
                         className="block w-full rounded-md border-gray-200 text-sm transition focus:border-blue-600 focus:ring-blue-600 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:opacity-75"
                       ></textarea>
@@ -232,7 +247,11 @@ export default function Upload({ isOpen, closeModal }) {
                         Cancelar
                       </button>
 
-                      <button type="button" onClick={() => sendData() } className="btn-primary">
+                      <button
+                        type="button"
+                        onClick={() => sendData()}
+                        className="btn-primary"
+                      >
                         Publicar proyecto
                       </button>
                     </div>
@@ -243,6 +262,8 @@ export default function Upload({ isOpen, closeModal }) {
           </div>
         </Dialog>
       </Transition>
+
+      <Toaster position="bottom-center" reverseOrder={false} />
     </>
   );
 }
